@@ -1,35 +1,40 @@
 #!/usr/bin/env python3
 
 import os
+import gzip
+import pickle
 
-# Load in the sequence database
-print("Reading database\n")
-sequence_database = {} # set an emptry database
-max_length = -1 # set max length as -1 so that we can find the longest in the loop
-max_name = '' # name of the longest sequence
-with open('nucleotideseq.fa', 'r') as file: # open the database file if a text file
-    name = '' # var to store current sequence name from the file
-    sequence = '' # var to store current sequence  from the file
-    for line in file: # go through each line until we get to the next fasta header >
-        if line.startswith('>'): # if the line contains a > character, it is a sequence name
-            if name:  # save the previous name and sequence
-                sequence_database[name] = sequence # store the sequence in the database
-                if len(sequence) > max_length: # check to see if the sequence is the longest
-                    max_length = len(sequence) # if it is, store it ...
-                    max_name = name # ... and store the name
-            name = line.strip()[1:]  # remove the '>' character for storing the name
-            sequence = ''  # reset the sequence var
-        else:
-            sequence += line.strip() # add the sequence to the sequence var with line breaks removed
-    if name:  # make sure to save the last name and sequence and check it's lengths
-        sequence_database[name] = sequence
-        if len(sequence) > max_length:
-            max_length = len(sequence)
-            max_name = name
+# if there isn't a pre-built pickle file, load in the sequence database and build a pickle binary for quick loading in future
+if not os.path.exists('sequence_database.bin.gz'):
+    print(f'\rBuilding New Database, Progress: 0.00%', end='') # empty progress report
+    sequence_database = {} # set an emptry database
+    #with open('nucleotideseq.fa', 'r') as file: # open the database file if a text file
+    with gzip.open('bacterial_plasmids_curated.fa.gz', 'rt') as file:
+        total_lines = sum(1 for _ in file) # get total size of database for the progress update
+    with gzip.open('bacterial_plasmids_curated.fa.gz', 'rt') as file: # open the database file if a gzip file
+        name = '' # var to store current sequence name from the file
+        sequence = '' # var to store current sequence  from the file
+            
+        for i, line in enumerate(file): # go through each line until we get to the next fasta header >
+            print(f'\rBuilding New Database, Progress: {100 * (i+1) / total_lines:.2f}%', end='') # Print progress
+            if line.startswith('>'): # if the line contains a > character, it is a sequence name
+                if name:  # save the previous name and sequence
+                    sequence_database[name] = sequence # store the sequence in the database
+                name = line.strip()[1:]  # remove the '>' character for storing the name
+                sequence = ''  # reset the sequence var
+            else:
+                sequence += line.strip() # add the sequence to the sequence var with line breaks removed
+        if name:  # make sure to save the last name and sequence and check it's lengths
+            sequence_database[name] = sequence
 
-# output some info to show database has been imported
-print("Database imported\n")
-print("Max size found:", max_length,"nt (",max_name,")")
+    with gzip.open('sequence_database.bin.gz', 'wb') as file:     # Save the database into a pickle file
+        pickle.dump(sequence_database, file)
+else:
+    print("\nLoading Prebuilt Database\n")
+    with gzip.open('sequence_database.bin.gz', 'rb') as file: # if there is already a prebuilt database, load it from the pickle file
+        sequence_database = pickle.load(file)
+
+print("\nDatabase imported\n")
 
 # get the input files ready
 input_dir = 'inputfiles'
