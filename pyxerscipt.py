@@ -3,6 +3,10 @@
 import os
 import gzip
 import pickle
+from Bio import Entrez, SeqIO
+import subprocess
+
+Entrez.email = "paul.capewell@glasgow.ac.uk"
 
 # if there isn't a pre-built pickle file, load in the sequence database and build a pickle binary for quick loading in future
 if not os.path.exists('sequence_database.bin.gz'):
@@ -67,3 +71,58 @@ for filename in os.listdir(input_dir):
     with open(os.path.join(output_dir, 'output_' + filename), 'w') as file:
         for name, sequence in sequences:
             file.write(f">{name}\n{sequence}\n")
+            
+os.makedirs('outputfiles/gbk', exist_ok=True)
+os.makedirs('outputfiles/gff3', exist_ok=True)
+
+# Extract sequence names from sequences
+sequence_names = [name.rsplit('_', 1)[0] for name, _ in sequences]
+total_sequences = len(sequence_names)
+
+for i, sequence_name in enumerate(sequence_names):
+    # Define file paths for gbk, gff3, and fasta files
+    gbk_file_path = os.path.join(output_dir, 'gbk', f'{sequence_name}.gbk')
+    gff3_file_path = os.path.join(output_dir, 'gff3', f'{sequence_name}.gff3')
+    fasta_file_path = os.path.join(output_dir, 'gff3', f'{sequence_name}.fasta')
+
+    # Check if the gbk file already exists, if not download it
+    if not os.path.exists(gbk_file_path):
+        try:
+            handle = Entrez.efetch(db="nucleotide", id=sequence_name, rettype="gbwithparts", retmode="text")
+            record = SeqIO.read(handle, "genbank")
+            handle.close()
+            with open(gbk_file_path, 'w') as f:
+                SeqIO.write(record, f, "genbank")
+        except Exception as e:
+            print(f"Failed to download GenBank file for {sequence_name}: {e}")
+
+    # Check if the gff3 file already exists, if not download it
+    if not os.path.exists(gff3_file_path):
+        try:
+            handle = Entrez.efetch(db="nucleotide", id=sequence_name, rettype="gff3", retmode="text")
+            data = handle.read()
+            handle.close()
+
+            with open(gff3_file_path, 'w') as f:
+                f.write(data)
+        except Exception as e:
+            print(f"Failed to download GFF3 file for {sequence_name}: {e}")
+
+    # Check if the fasta file already exists, if not download it
+    if not os.path.exists(fasta_file_path):
+        try:
+            handle = Entrez.efetch(db="nucleotide", id=sequence_name, rettype="fasta", retmode="text")
+            record = SeqIO.read(handle, "fasta")
+            handle.close()
+
+            with open(fasta_file_path, 'w') as f:
+                SeqIO.write(record, f, "fasta")
+        except Exception as e:
+            print(f"Failed to download FASTA file for {sequence_name}: {e}")
+
+    # Print progress
+    print(f'Progress: {100 * (i+1) / total_sequences:.2f}%')
+
+# Run the clinker command
+print ("Running Clinker")
+subprocess.run(f'clinker {output_dir}/gff3/*.gff3 -p cluster.html', shell=True, check=True)
