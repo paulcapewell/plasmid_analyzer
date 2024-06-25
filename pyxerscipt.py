@@ -4,6 +4,7 @@ import os
 import gzip
 import pickle
 from Bio import Entrez, SeqIO
+from Bio.SeqFeature import FeatureLocation, SeqFeature
 import subprocess
 
 Entrez.email = "paul.capewell@glasgow.ac.uk"
@@ -34,17 +35,17 @@ if not os.path.exists('sequence_database.bin.gz'):
     with gzip.open('sequence_database.bin.gz', 'wb') as file:     # Save the database into a pickle file
         pickle.dump(sequence_database, file)
 else:
-    print("\nLoading Prebuilt Database\n")
+    print("Loading Prebuilt Database\n")
     with gzip.open('sequence_database.bin.gz', 'rb') as file: # if there is already a prebuilt database, load it from the pickle file
         sequence_database = pickle.load(file)
 
-print("\nDatabase imported\n")
-
+print("Database imported\n")
 # get the input files ready
 input_dir = 'inputfiles'
 output_dir = 'outputfiles'
 os.makedirs(output_dir, exist_ok=True)
 
+all_sequences=[] # store all sequences in a list
 complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'} # lookup table for complementing bases
 for filename in os.listdir(input_dir):
     sequences = [] # reset sequences list for each file
@@ -65,64 +66,72 @@ for filename in os.listdir(input_dir):
                     else:
                         start = sequence_position - 190 + len(full_sequence) - 1  # if a forward file, start at the beginning of the sequence -190
                         sequence = wrapped_sequence[start-(28-length):(start+190+length)] # store 190+length bases from the start position (correcting for specific length), allowing for wrap around
-                    sequences.append((f"{sequence_name}_{sequence_position}", sequence)) # store the sequence name + length and the sequence in the output array
-
-    # Write the sequences to an output file
+                    sequences.append((f"{sequence_name}_{sequence_position}", sequence)) # store the sequence name + length and the sequence in the single input file output array
+                    all_sequences.append((f"{sequence_name}_{sequence_position}", sequence)) # store the sequence name + length and the sequence in the overall output array
+    # Write the sequences to an output file (per input file)
     with open(os.path.join(output_dir, 'output_' + filename), 'w') as file:
         for name, sequence in sequences:
             file.write(f">{name}\n{sequence}\n")
-            
+
+# check required output files exist            
 os.makedirs('outputfiles/gbk', exist_ok=True)
-os.makedirs('outputfiles/gff3', exist_ok=True)
+os.makedirs('outputfiles/sliced_gbk', exist_ok=True)
 
-# Extract sequence names from sequences
-sequence_names = [name.rsplit('_', 1)[0] for name, _ in sequences]
-total_sequences = len(sequence_names)
+# Prepare the list of sequences to be examined (from all input files)
+name_number_mapping = {} 
+for sequence in all_sequences:
+    parts = sequence[0].rsplit('_', 1)  # Split from the right to get the last part separately
+    if len(parts) == 2:  # Ensure the sequence name contains an underscore
+        sequence_name, sequence_number_str = parts
+        try:
+            sequence_number = int(sequence_number_str)  # Convert sequence number to integer
+            name_number_mapping[sequence_name] = sequence_number # store the sequence name and motif positon so they can be looked up later
+        except ValueError:
+            print(f"Skipping sequence with invalid number: {sequence}")
+    else:
+        print(f"Skipping invalid sequence name: {sequence}")
 
-for i, sequence_name in enumerate(sequence_names):
-    # Define file paths for gbk, gff3, and fasta files
-    gbk_file_path = os.path.join(output_dir, 'gbk', f'{sequence_name}.gbk')
-    gff3_file_path = os.path.join(output_dir, 'gff3', f'{sequence_name}.gff3')
-    fasta_file_path = os.path.join(output_dir, 'gff3', f'{sequence_name}.fasta')
-
-    # Check if the gbk file already exists, if not download it
-    if not os.path.exists(gbk_file_path):
+# Download the gbk files 
+for i, sequence_name in enumerate(name_number_mapping.keys()):
+    if not os.path.exists(os.path.join(output_dir, 'gbk', f'{sequence_name}.gbk')): # Check if the gbk file already exists, if not download it using Biopython
         try:
             handle = Entrez.efetch(db="nucleotide", id=sequence_name, rettype="gbwithparts", retmode="text")
             record = SeqIO.read(handle, "genbank")
             handle.close()
-            with open(gbk_file_path, 'w') as f:
+            with open(os.path.join(output_dir, 'gbk', f'{sequence_name}.gbk'), 'w') as f:
                 SeqIO.write(record, f, "genbank")
         except Exception as e:
-            print(f"Failed to download GenBank file for {sequence_name}: {e}")
+            print(f"Failed to download GenBank file for {sequence_name}: {e}") # print an rror message if download fails
 
-    # Check if the gff3 file already exists, if not download it
-    if not os.path.exists(gff3_file_path):
-        try:
-            handle = Entrez.efetch(db="nucleotide", id=sequence_name, rettype="gff3", retmode="text")
-            data = handle.read()
-            handle.close()
-
-            with open(gff3_file_path, 'w') as f:
-                f.write(data)
-        except Exception as e:
-            print(f"Failed to download GFF3 file for {sequence_name}: {e}")
-
-    # Check if the fasta file already exists, if not download it
-    if not os.path.exists(fasta_file_path):
-        try:
-            handle = Entrez.efetch(db="nucleotide", id=sequence_name, rettype="fasta", retmode="text")
-            record = SeqIO.read(handle, "fasta")
-            handle.close()
-
-            with open(fasta_file_path, 'w') as f:
-                SeqIO.write(record, f, "fasta")
-        except Exception as e:
-            print(f"Failed to download FASTA file for {sequence_name}: {e}")
-
-    # Print progress
-    print(f'Progress: {100 * (i+1) / total_sequences:.2f}%')
+#slice sequences to focus analysis on the motif
+print("Slicing Sequences\n")
+for sequence_name, sequence_number in name_number_mapping.items():
+    if os.path.exists(os.path.join(f"outputfiles/gbk/{sequence_name}.gbk")):
+        record = SeqIO.read(os.path.join(f"outputfiles/gbk/{sequence_name}.gbk"), "genbank")
+        sequence = record.seq
+        with open(os.path.join(f"outputfiles/gbk/{sequence_name}.gbk"), "r") as input_handle:
+            record = SeqIO.read(input_handle, "genbank")
+        sliced_record = record[sequence_number - 1501:sequence_number + 1500]
+        # Adjust the features to match the sliced sequence
+        new_features = []
+        for feature in record.features:
+            if feature.location.end >= sequence_number - 1500 and feature.location.start <= sequence_number + 1500:
+                # Adjust the feature location
+                start = sequence_number - 1500
+                end = sequence_number + 1500
+                new_start = max(0, feature.location.start - start)
+                new_end = min(end - start, feature.location.end - start)
+                new_location = FeatureLocation(new_start, new_end, strand=feature.location.strand)
+                new_feature = SeqFeature(new_location, type=feature.type, qualifiers=feature.qualifiers)
+                new_features.append(new_feature) 
+        sliced_record.features = new_features     # Update the features of the sliced record
+        
+        with open(os.path.join(f"outputfiles/sliced_gbk/{sequence_name}.gbk"), "w") as output_handle:
+            SeqIO.write(sliced_record, output_handle, "genbank")
+        #slice_gbk(file_path,output_path,sequence_number - 1500, sequence_number + 1500)
+    else:
+        print(f"File not found for {sequence_name}")
 
 # Run the clinker command
-print ("Running Clinker")
-subprocess.run(f'clinker {output_dir}/gff3/*.gff3 -p cluster.html', shell=True, check=True)
+print ("Running Clinker\n")
+subprocess.run(f'clinker ./outputfiles/sliced_gbk/*.gbk --force -p ./outputfiles/clusters.html -o outputfiles/output_summary.txt -mo outputfiles/matrix.csv', shell=True, check=True)
