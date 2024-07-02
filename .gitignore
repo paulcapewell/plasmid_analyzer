@@ -1,4 +1,4 @@
 /nucleotideseq.fa
 /bacterial_plasmids_curated.fa.gz
 /sequence_database.bin.gz
-outputfiles/*
+/outputfiles/*
