@@ -10,7 +10,6 @@ from Bio.SeqFeature import FeatureLocation, SeqFeature, CompoundLocation
 from Bio.SeqRecord import SeqRecord
 import subprocess
 
-Entrez.email = "paul.capewell@glasgow.ac.uk"
 # User-configurable settings
 ENTREZ_EMAIL = "paul.capewell@glasgow.ac.uk"
 INPUT_DIR = 'inputfiles'
@@ -61,6 +60,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 all_hits = []
 used_hit_ids = set()
 complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+# Derive the non-motif flank so each extracted window stays HIT_WINDOW_LENGTH bases long.
 window_flank = HIT_WINDOW_LENGTH - REFERENCE_MOTIF_LENGTH
 for filename in sorted(os.listdir(INPUT_DIR)):
     if not filename.lower().endswith('.txt'):
@@ -71,6 +71,7 @@ for filename in sorted(os.listdir(INPUT_DIR)):
     except (IndexError, ValueError):
         print(f"Skipping input file with an unrecognized name: {filename}")
         continue
+    # The filename's penultimate token is motif length; REV selects reverse-strand handling.
     is_reverse = 'REV' in filename.upper()
     direction = 'REV' if is_reverse else 'FOR'
     with open(os.path.join(INPUT_DIR, filename), 'r') as file:
@@ -94,12 +95,14 @@ for filename in sorted(os.listdir(INPUT_DIR)):
             full_sequence = sequence_database[sequence_name]
             if not full_sequence:
                 continue
+            # Tripling lets windows cross the circular sequence boundary without special cases.
             wrapped_sequence = (full_sequence * 3).upper()
             if is_reverse:
                 start = sequence_position + len(full_sequence) - 1
                 sequence = wrapped_sequence[start:(start + HIT_WINDOW_LENGTH)]
                 sequence = "".join(complement.get(base, base) for base in reversed(sequence))
             else:
+                # Shift the window boundary for this motif length while keeping its total length fixed.
                 start = sequence_position - window_flank + len(full_sequence) - 1
                 sequence = wrapped_sequence[
                     start - (REFERENCE_MOTIF_LENGTH - motif_length):
@@ -113,6 +116,7 @@ for filename in sorted(os.listdir(INPUT_DIR)):
                 duplicate_number += 1
             used_hit_ids.add(hit_id)
             sequences.append((f"{sequence_name}_{sequence_position}", sequence))
+            # Preserve per-hit metadata; an accession can have hits in multiple files.
             all_hits.append((sequence_name, sequence_position, motif_length, is_reverse, hit_id))
     with open(os.path.join(OUTPUT_DIR, 'output_' + filename), 'w') as file:
         for name, sequence in sequences:
@@ -121,6 +125,7 @@ for filename in sorted(os.listdir(INPUT_DIR)):
 os.makedirs(os.path.join(OUTPUT_DIR, 'gbk'), exist_ok=True)
 os.makedirs(os.path.join(OUTPUT_DIR, 'sliced_gbk'), exist_ok=True)
 
+# Fetch each accession once; the resulting record is reused for all of its hits.
 sequence_names = dict.fromkeys(hit[0] for hit in all_hits)
 for sequence_name in sequence_names:
     gbk_path = os.path.join(OUTPUT_DIR, 'gbk', f'{sequence_name}.gbk')
@@ -148,8 +153,10 @@ for sequence_name, position, motif_length, is_reverse, hit_id in all_hits:
         print(f"Skipping empty sequence for {sequence_name}")
         continue
 
+    # Convert scanner positions to the center convention used by the 3 kb slice.
     center_offset = REVERSE_CENTER_OFFSET if is_reverse else motif_length + FORWARD_CENTER_OFFSET
     sequence_number = position + center_offset
+    # Repeat enough copies to keep the full slice in bounds for short circular sequences.
     copies_each_side = (SLICE_FLANK + sequence_length - 1) // sequence_length
     copy_count = copies_each_side * 2 + 1
     middle_copy = copy_count // 2
@@ -170,9 +177,11 @@ for sequence_name, position, motif_length, is_reverse, hit_id in all_hits:
             )
             clipped_parts = []
             for part in source_parts:
+                # Move the zero-coordinate part forward one copy to preserve origin-spanning joins.
                 part_shift = shift + sequence_length if spans_origin and int(part.start) == 0 else shift
                 feature_start = int(part.start) + part_shift
                 feature_end = int(part.end) + part_shift
+                # Clip feature parts to this window, then convert them to slice-relative coordinates.
                 clipped_start = max(feature_start, start_range)
                 clipped_end = min(feature_end, end_range)
                 if clipped_start < clipped_end:
@@ -204,6 +213,7 @@ for sequence_name, position, motif_length, is_reverse, hit_id in all_hits:
     )
     final_record.annotations["molecule_type"] = "DNA"
 
+    # Mark the expected Xer site; this placeholder is not a new motif-search result.
     xer_motif_start = SLICE_FLANK + XER_FEATURE_CENTER_OFFSET
     xer_motif_location = FeatureLocation(
         xer_motif_start,

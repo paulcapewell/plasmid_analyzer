@@ -97,7 +97,7 @@ The configuration block in `pyxerscipt.py` contains the main settings:
 - `REFERENCE_MOTIF_LENGTH`: reference motif size used in the forward-window calculation. The remaining flank is derived as `HIT_WINDOW_LENGTH - REFERENCE_MOTIF_LENGTH` (currently 190 bases).
 - `SLICE_FLANK`: bases retained on each side of the computed hit center. The resulting slice is twice this value (currently 3,000 bases total).
 - `FORWARD_CENTER_OFFSET` and `REVERSE_CENTER_OFFSET`: position corrections used to place the hit center. The current formulas are `position + motif_length - 6` for forward hits and `position` for reverse hits. These depend on the hit files' coordinate convention; verify that convention before changing them.
-- `XER_FEATURE_CENTER_OFFSET`: shifts the start of the placeholder Xer annotation relative to the center of the sliced region. Zero starts it at coordinate 1500 with the current `SLICE_FLANK`.
+- `XER_FEATURE_CENTER_OFFSET`: shifts the start of the placeholder Xer annotation relative to the center of the sliced region. Zero starts it at coordinate 1500 with the current `SLICE_FLANK`. Changing this will make the metadata  inaccurate.
 - `XER_FEATURE_LENGTH`: span of each placeholder `gene` and `CDS` feature, currently six bases. These are annotations added for comparison, not a motif detection result.
 
 The Clinker executable arguments and its three output filenames are configured at the end of the script.
