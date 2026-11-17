@@ -1,4 +1,13 @@
-/nucleotideseq.fa
-/bacterial_plasmids_curated.fa.gz
-/sequence_database.bin.gz
-/outputfiles/*
+
+# macOS and editor files
+.DS_Store
+.Rhistory
+
+# Output folders and caches across all parts
+**/output_folder/
+**/output_folder_old/
+**/cached_plasmid_database/
+**/*.bin.gz
+**/*.fa.gz
+*.pdf
+

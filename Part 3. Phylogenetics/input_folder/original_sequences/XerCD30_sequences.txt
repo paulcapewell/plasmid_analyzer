@@ -1,0 +1,14 @@
+>cer_ColE1
+GGTGCGTACAATTAAGGGATTATGGTAAAT
+>pUB2380
+ggtgcgtacaattaagggattatggtaaat
+>pZE8_Citrobacter
+ggtgcgtacaattaagggattatggtaaat
+>ColK
+ggtgcgtacaattaagggattatggtaaat
+>Ckr_pColK-K235
+ggtgcgtacaattaagggattatggtaaat
+>pKLebB-k17/80_Klebsiella
+ggtgcgtacaattaagggattatggtaaat
+>Escherichia_pIGAL1
+ggtgcgtacaatgaactcttatgttaaatc

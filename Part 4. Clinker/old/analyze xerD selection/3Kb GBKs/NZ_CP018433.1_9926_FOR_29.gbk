@@ -1,0 +1,205 @@
+LOCUS       NZ_CP018433.1_3000bp    3000 bp    DNA              UNK 01-JAN-1980
+DEFINITION  3000bp segment around Xer site 9926.
+ACCESSION   NZ_CP018433.1_3000bp
+VERSION     NZ_CP018433.1_3000bp
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     source          1..3000
+                     /organism="Klebsiella pneumoniae"
+                     /mol_type="genomic DNA"
+                     /strain="MNCRE53"
+                     /isolation_source="Wound"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:573"
+                     /plasmid="pMNCRE53_1"
+                     /geo_loc_name="USA:Minnesota"
+                     /lat_lon="46.7296 N 94.6859 W"
+                     /collection_date="2012-05"
+                     /collected_by="Minnesota Department of Health"
+     gene            complement(1..144)
+                     /locus_tag="BTE50_RS00065"
+                     /old_locus_tag="BTE50_00065"
+     CDS             complement(1..144)
+                     /locus_tag="BTE50_RS00065"
+                     /old_locus_tag="BTE50_00065"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_000165970.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="Rop family plasmid primer RNA-binding protein"
+                     /protein_id="WP_000165971.1"
+                     /translation="MTKQEKTALNMAKFIKEQSLLLLDKLNELDMDTPADMCERLHEDA
+                     ETLWQVMRDKLGEE"
+     gene            213..590
+                     /locus_tag="BTE50_RS00070"
+                     /old_locus_tag="BTE50_00070"
+     CDS             213..590
+                     /locus_tag="BTE50_RS00070"
+                     /old_locus_tag="BTE50_00070"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_004146445.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="hypothetical protein"
+                     /protein_id="WP_000312627.1"
+                     /translation="MAWVTVRQATELTGKARSSLYRDMAKGRVSYRTEADGGRVVDTSE
+                     LIRVYGELRQDETHERDELRLSGETEKMASDALIAEIKALREEVAGLRQEMQSMRLLEH
+                     KPETAETPAGTPRRWWPWGKR"
+     gene            complement(652..951)
+                     /locus_tag="BTE50_RS00075"
+                     /old_locus_tag="BTE50_00075"
+     CDS             complement(652..951)
+                     /locus_tag="BTE50_RS00075"
+                     /old_locus_tag="BTE50_00075"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_001146176.1"
+                     /GO_component="GO:0110001 - toxin-antitoxin complex
+                     [Evidence IEA]"
+                     /GO_function="GO:0090729 - toxin activity [Evidence IEA]"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="type II toxin-antitoxin system RelE/ParE family
+                     toxin"
+                     /protein_id="WP_001146176.1"
+                     /translation="MPYDVEWKQGAIEDVTTLFDYIAENSSLWDAQNVTDRVLAAADKL
+                     ADFPRLYEVDSRYGEDVRRISLMGQHVLYDVDDQTRKVRVLAVVGQRQNPHIVL"
+     gene            complement(941..1204)
+                     /locus_tag="BTE50_RS00080"
+                     /old_locus_tag="BTE50_00080"
+     CDS             complement(941..1204)
+                     /locus_tag="BTE50_RS00080"
+                     /old_locus_tag="BTE50_00080"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_000072676.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="hypothetical protein"
+                     /protein_id="WP_000072676.1"
+                     /translation="MSNTTHYENANFLRELAESLPRILPEGGPDKAALLQRLANEELAQ
+                     AEYEDQVRAKVTAARADTRPGMTTEQLRQRLHGRYQELRDAV"
+     gene            1501..1506
+                     /pseudo=""
+                     /locus_tag="XM_001"
+                     /note="Xer Motif placeholder"
+     CDS             1501..1506
+                     /locus_tag="XER"
+                     /note="Xer Motif placeholder"
+                     /pseudo=""
+                     /codon_start=1
+                     /transl_table=11
+                     /product="Xer Motif placeholder"
+     gene            complement(1510..1929)
+                     /locus_tag="BTE50_RS00085"
+                     /old_locus_tag="BTE50_00085"
+     CDS             complement(1510..1929)
+                     /locus_tag="BTE50_RS00085"
+                     /old_locus_tag="BTE50_00085"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_016247941.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="Exc2 family lipoprotein"
+                     /protein_id="WP_001254601.1"
+                     /translation="MRRSGSKLCLIAMITATATLTACAPKGSVEQHTRHYVYASDDGFD
+                     PNFSTQKADTTRMMVPFFRQFWDMGAKDKATGKSRSDVQQRIQQFHSQEFLNSLQGTTQ
+                     FAGTDYRSKDLTPKKSRLLADTISAVYLDGYEGRQ"
+     gene            complement(2006..3000)
+                     /locus_tag="BTE50_RS00090"
+                     /old_locus_tag="BTE50_00090"
+     CDS             complement(2006..3000)
+                     /locus_tag="BTE50_RS00090"
+                     /old_locus_tag="BTE50_00090"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_032495017.1"
+                     /GO_function="GO:0004803 - transposase activity [Evidence
+                     IEA]"
+                     /GO_process="GO:0006313 - DNA transposition [Evidence IEA]"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="Tn3-like element Tn3 family transposase"
+                     /protein_id="WP_001143775.1"
+                     /translation="MPVDFLTTEQVESYGRFTGEPDELQLARYFHLDEADKEFIGKSRG
+                     DHNRLGIALQIGCVRFLGTFLTDMNHIPSGVRHFTARQLGIRDITVLAEYGQRENTRRE
+                     HAALIRQHYQYREFAWPWTFRLTRLLYTRSWISNERPGLLFDLATGWLMQHRIILPGAT
+                     TLTRLISEVREKATLRLWNKLALIPSAEQRSQLEMLLGPTDCSRLSLLESLKKGPVTIS
+                     GPAFNEAIERWKTLNDFGLHAENLSTLPAVRLKNLARYAGMTSVFNIARMSPQKRMAVL
+                     VAFVLAWETLALDDALDVLDAMLAVIIRDARKIGQKKRLRSLKDLDKSALALASACSYL
+                     LKEETPDESIRAEVFSYIPRQKLAEIITLVREIARPSDDNFHDEMVEQYGRVRRFLPHL
+                     LNTVKFSSAPAGVTTLNACDYLSREFSSRRQFFDDAPTEIISQSWKRLVINKEKHITRR
+                     GYTLCFLSKLQDSLRRRDVYVTGSNRWGDPRARLLQGADWQANRIKVYRSLGHPTDPQE
+                     AIKSLGHQLDSRYRQVAARLGENEAVELDVSGPKPRLTISPLASLDEPDSLKRLSKMIS
+                     DLLPPVDLTELLLEINAHTGFADEFFHASEASARVDDLPVSISAVLMAEACNIGLEPLI
+                     RSNVPALTRHRLNWTKANYLRAETITSANARLVDFQATLPLAQIWGGGEVASADGMRFV
+                     TPVRTINAGPNRKYFGNNRGITWYNFVSDQYSGFHGIVIPGTLRDSIFVLEGLLEQETG
+                     LNPTEIMTDTAGASDLVFGLFWLLGYQFSPRLADAGASVFWRMDHDADYGVLNDIARGQ
+                     SDPRKIVLQWDEMIRTAGSLKLGKVQASVLVRSLLKSERPSGLTQAIIEVGRINKTLYL
+                     LNYIDDEDYRRRILTQLNRGESRHAVARAICHGQKGEIRKRYTDGQEDQLGALGLVTNA
+                     VVLWNTIYMQAALDHLRAQGETLNDEDIARLSPLCHGHINMLGHYSFTLAELVTKGHLR
+                     PLKEASEAENVA"
+ORIGIN
+        1 gagtgtttcc gcatcctcgt gtagccgctc gcacatgtcg gccggggtat ccatatccag
+       61 ctcattcagt ttatcgagca atagcagcga ctgctcctta ataaatttag ccatattgag
+      121 ggctgttttt tcctgttttg tcatgattct ttccttccgg gcatggtgtg cgcctgtcag
+      181 gtatactgtc tcaaaaatag cggggtgaga caatggcgtg ggtgacggtg agacaggcga
+      241 cggaactgac gggtaaagcc cgaagttccc tgtatcggga tatggcgaaa ggccgcgtat
+      301 cataccgtac ggaagctgat ggcggccggg tggtggatac cagcgagctt atccgggtgt
+      361 acggtgagtt aagacaggat gagactcacg agcgggacga gttgagactg tcgggtgaga
+      421 ctgaaaaaat ggcctccgac gcgttgatcg cggagataaa agcactcagg gaggaggtgg
+      481 ccgggctacg gcaggaaatg cagtccatga gactgctgga acacaaaccg gagacagcag
+      541 agaccccggc cggaacaccg cgccggtggt ggccgtgggg aaaacgctga cgcgctgtgc
+      601 ttgtccaacc ggcgacggcc acgcaatgaa ttgcgtcccc gtcaccggtt attagagaac
+      661 aatatgggga ttctggcgct ggccgaccac ggccagaacc cggacttttc tggtctggtc
+      721 atcaacatca tagaggacat gctgtcccat cagactgatc cggcgaacgt cctcgccata
+      781 gcgtgagtcc acttcataga gtcgcgggaa gtcggccagt ttgtccgccg cagcgagaac
+      841 ccggtcggta acgttctgcg catcccacag ggatgaattt tccgcgatat agtcaaacag
+      901 cgtcgttaca tcctcgatgg ctccctgctt ccattccacg tcatacggca tcgcgcagtt
+      961 cctgataacg gccatgcagg cgctggcgga gttgttccgt ggtcataccc ggacgcgtgt
+     1021 cagcacgggc ggcggtcact ttggcgcgaa cctgatcttc atactctgcc tgggccagtt
+     1081 cttcgttagc cagtcgctgc aacagcgcag ctttgtccgg gccaccttcc ggcagtatgc
+     1141 ggggcaggct ttcagccagt tcccgaagaa agttggcgtt ttcgtagtgt gtagtgttgc
+     1201 tcattgcgga gcctcccggg ttaatgcggc aatatgaagg aagtttagca gggggcggtc
+     1261 tgaaagaata tggtcgtgtc agtcaggctg atgaagcaga aagtcggtaa aaaagggctt
+     1321 acggcatcca ttttacgtca aaacatatgc catgcagttg cgtgcatagg catgcattag
+     1381 gataaaattt atcgggcgcg tttccggcag ttttccgggg gggttgttgc ctgttttatc
+     1441 ccgtagccgc cggaaacgcc ctgagcccgt ctgagcggtg cgcgtaatga cgcgttatgg
+     1501 taaatccact tactgtctgc cttcatagcc atcgagataa acagctgaaa tggtgtcagc
+     1561 cagtagcctt gattttttcg gtgtgaggtc tttgctgcgg taatcggtac ccgcaaattg
+     1621 tgttgtgcct tggagtgagt ttaaaaattc ctgactgtga aactgctgaa tgcgttgctg
+     1681 cacatcactc cgtgattttc cggtcgcttt atcctttgcg cccatatccc agaactgccg
+     1741 gaaaaaaggc accatcattc gtgttgtgtc agctttctgg gtggaaaaat tgggatcaaa
+     1801 accgtcatct gaagcatata cgtaatgccg ggtatgctgt tccacgctgc cctttggagc
+     1861 acaggcagtg agagttgctg tcgctgttat catggcgata agacacagtt tgctgccgga
+     1921 acgtctcatg agcgtctcct tacctttaat tcttttttct cattgagtta taggggtctg
+     1981 acgctcagtg gaacgaaaac tcacgttaag caacgttttc tgcctctgac gcctctttta
+     2041 atggtctcag atgacctttg gtcaccagtt ctgccagcgt gaaggaataa tggccgagca
+     2101 tattgatatg tccgtggcaa agcggggaga ggcgtgcgat atcttcatca ttcagtgttt
+     2161 caccctgcgc ccggagatga tccagagctg cctgcatata aatagtgttc cataacacga
+     2221 cggcgttagt gaccagcccc agagctccca actgatcttc ctgaccgtcg gtatatcgtt
+     2281 ttcttatctc acctttttga ccgtgacaga tggctctggc aactgcatga cggctttctc
+     2341 cccgattaag ctgggtcaga atgcgccggc ggtaatcttc atcatcaata taattaagca
+     2401 gatacagcgt tttgttgatg cgccccactt caatgattgc ctgagtcagt ccggagggac
+     2461 gttcactttt cagcaatgaa cggaccagca ctgaggcctg tactttgccc agcttcaggg
+     2521 agcctgcggt ccggatcatt tcgtcccact gaaggactat ttttcgggga tctgattgcc
+     2581 ctctggcaat atcattcagc acgccatagt cggcatcatg gtccattcgc cagaaaaccg
+     2641 aagcaccggc atcagccagg cgtggagaaa actggtatcc cagcagccag aaaaggccaa
+     2701 agacaagatc gctggcacct gccgtatcgg tcataatttc ggttggattc agcccggtct
+     2761 cctgttccag aaggccttcc agcacaaaga tagagtccct cagcgtcccc ggtataacga
+     2821 tgccatgaaa gccggaatac tgatcggaca caaagttgta ccaggtgatc cctctgttat
+     2881 taccaaagta tttgcggttc ggtccggcat tgattgttct gactggcgta acaaagcgca
+     2941 ttccatctgc agatgccact tctcctccac cccatatctg tgccagtggc agcgttgcct
+//

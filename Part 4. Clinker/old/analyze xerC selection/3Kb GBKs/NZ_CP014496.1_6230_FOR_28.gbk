@@ -1,0 +1,139 @@
+LOCUS       NZ_CP014496.1_3000bp    3000 bp    DNA              UNK 01-JAN-1980
+DEFINITION  3000bp segment around Xer site 6230.
+ACCESSION   NZ_CP014496.1_3000bp
+VERSION     NZ_CP014496.1_3000bp
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     source          1..3000
+                     /organism="Escherichia coli"
+                     /mol_type="genomic DNA"
+                     /strain="SaT040"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:562"
+                     /plasmid="pSaT040"
+                     /geo_loc_name="USA: Burlington"
+                     /lat_lon="44.4758 N 73.2119 W"
+                     /collection_date="2007"
+     gene            1..143
+                     /locus_tag="AVR72_RS25340"
+                     /old_locus_tag="AVR72_25335"
+     CDS             1..143
+                     /locus_tag="AVR72_RS25340"
+                     /old_locus_tag="AVR72_25335"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_001080726.1"
+                     /GO_function="GO:0015643 - toxic substance binding
+                     [Evidence IEA]"
+                     /GO_process="GO:0030153 - bacteriocin immunity [Evidence
+                     IEA]"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="colicin E1 family microcin immunity protein"
+                     /protein_id="WP_001080732.1"
+                     /translation="MNRKYYFNNMWWGWVTGGYMLYMSWDYDFKYRLLFWCISLCGMVL
+                     YPVAKWYIEDTALKFTRPDFWNSGFFTDTPGKMGLLAVYTGTVFILSLPLSMIYILSVI
+                     IKRLSVR"
+     gene            1501..1506
+                     /pseudo=""
+                     /locus_tag="XM_001"
+                     /note="Xer Motif placeholder"
+     CDS             1501..1506
+                     /locus_tag="XER"
+                     /note="Xer Motif placeholder"
+                     /pseudo=""
+                     /codon_start=1
+                     /transl_table=11
+                     /product="Xer Motif placeholder"
+     gene            1595..2368
+                     /locus_tag="AVR72_RS28985"
+                     /old_locus_tag="AVR72_25345"
+                     /pseudo=""
+     CDS             1595..2368
+                     /locus_tag="AVR72_RS28985"
+                     /old_locus_tag="AVR72_25345"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_001554952.1"
+                     /note="incomplete; partial in the middle of a contig;
+                     missing N-terminus; Derived by automated computational
+                     analysis using gene prediction method: Protein Homology."
+                     /pseudo=""
+                     /codon_start=1
+                     /transl_table=11
+                     /product="replication initiation protein"
+     gene            2612..3000
+                     /locus_tag="AVR72_RS25355"
+                     /old_locus_tag="AVR72_25350"
+     CDS             2612..3000
+                     /locus_tag="AVR72_RS25355"
+                     /old_locus_tag="AVR72_25350"
+                     /inference="COORDINATES: similar to AA
+                     sequence:RefSeq:WP_001224622.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ChaN family lipoprotein"
+                     /protein_id="WP_001224623.1"
+                     /translation="MRKFILISMITLASVSLGACRQNVTIKQDAPGQKAFLTDGQIYDL
+                     HSGKIISSSELLADLATAQHLIIGEKHDNAEHHQIELWLIQNLLIQRPQGSVLLEMLTS
+                     EQQPRVNQVKCWLKDNPVVRDSRVQELLNWQKGWSWEMYGDIVMQLLRGPYPLLNANIG
+                     REQILALYKKNEFPKGKKSTAPVVQEALRETIISMHEGNLESQQLTSMLSIQQQRDRYM
+                     ARQLLSAPVPSLLIAGGYHASKSMGVPLHMEDLATGTHPVVLMLAEKGMNITVDHADYV
+                     WFVAPDTTKR"
+ORIGIN
+        1 tctggaacag cggttttttt actgatacac ctggaaaaat gggattgctt gctgtttata
+       61 cgggtactgt tttcatatta tctcttccgt taagtatgat atatattctt tctgttatta
+      121 taaaaaggct gtctgtaaga tagacagcct gtcttatatt ttatttaaat accccagaac
+      181 ttatgccaca agaattatct aaaagttgcc gttctactcc gttagtttgt agttctatca
+      241 tagtcttatt aactcgatca cgaggtctgt atgacgggga agcttgcgct gtaagattat
+      301 atgataatgc acatattgta atgatagttg tttttatctt tgtgtttaat gtgaaaattt
+      361 tataaagcat ataatgttcc ctatttttat tttgtttata atttattggt tgtatgttaa
+      421 atctatcata agtctaatga ttaaaatggt tagtggtgtc aggattagtg aaaataaagg
+      481 atgtaatatg ctattctttc tctgtaagta cttgagaata ctaaaccata gtacaagaat
+      541 gattatgtac atgtagtgag aattggaaaa catagtttct tcccgtgtta atgagagtat
+      601 gtgtttttat gtggggatat gtacacccca tatagatgta ttatgttata tttataatat
+      661 acctcggcaa aataaaagga ttgttataga aatagggaag gctataaaaa agcttatatt
+      721 aaggtctgtt ttcttcttag aaaaataatt ctttgttcta attattatag atgtaatccc
+      781 ccaaacaata aaaagaatgg agctgcttgt aattatttga tatatcaaaa ttgttttcct
+      841 ctatttttgt gtagatagat gttaatggca ctgggtgcat ttattcgtaa tttctttttc
+      901 catgctgggc cagcaggagc atttgaacag aaacttgatt aatcatgaaa acacatcact
+      961 tatcgaagaa aaaaatataa actaacagaa taactataga tgcagggaaa gctaagaata
+     1021 agcttatagc tggggctgtt tttttgttga atttccagtt tgtgactctg attattacag
+     1081 ctatagtcat ccagactata attaaaatag aactgccatt gataaaatca tatttcaaaa
+     1141 taaattctcc tgtatttgtc actcaatcgg tggtttatgt gactatattc gcaaaaactg
+     1201 gtcgcagaaa agtcctgttt tcagcttgga aacccggtaa tcagaataat ggatagggga
+     1261 acaaaaatct ctgtatagaa cgctccattg agggagagaa aacgtgtcat tttgacccgt
+     1321 tcggtattca gaacacacaa aaccgatcgc gggtcgcttt cgtgcatagt tatgcagcca
+     1381 tctaaaaacg attctggcgc gtttttctgg tttggcctgg tgttttcttg tctttttgcg
+     1441 ttttttgcgc cagaaagcgg ctgagggcgt tttaaggggt acgtacaacg ggagttatgg
+     1501 taaatggatc ggtttttcgg gaaggatcga caggatttgc cgttgggtgt agtgtaagcg
+     1561 actgaaaaac aaacgcccct gaaatcatgt ccagatccgg cagaaccagc ctcatgcgca
+     1621 gttctggctg gtttttgacg ttgatcgcga gggggcagcg attgactgga gcgaccggaa
+     1681 cgctcccgcg ccgaacatca ccgtaaaaaa tcctgtgaac ggtcatgctc acctgctcta
+     1741 cgcgctcaat atcgccgtga gaaccgcgcc ggacagctcg gttaaggcgc tgaaatacgc
+     1801 cgctgcgatt gaacgttcgc tgtgtgagaa actttgtgct gatgtgaact acagcggact
+     1861 gatttgtaaa aatccgttcc acctggaatg gcaggtgatg gagtggcgag aggaagccta
+     1921 taccctcgat gaactggctg attatctcga tttgagcgcc tcagcgcgcc gtagcatcga
+     1981 taaacattac gggatggggc gaaactgcca cctgttcgaa atgacgcgca aatgggctta
+     2041 cagggcgatt cgtcagggct ggcccgaatt ctcacagtgg cttgatgccg tgattcagcg
+     2101 tgtcgaaatg tacaacgcat cgcttcccgt tccgctttca ccgcctgaat gtcgggctat
+     2161 tggcaagagc attgcgaaat acacgcacag gaacttcacg ccggaaactt tcgcacagta
+     2221 tgtggctgat acgcacacat taacgtacgt tttcgttcca ttggccctca cccccgataa
+     2281 cgacccaggt agcgcgccgt attccccccg ccggccgttt tcttcgacat gtacatcagg
+     2341 cgcggaactc atcggggcgc aggaatgaaa tcccattcag actccggata gattcaagca
+     2401 agcccactta tcgtcaaaat cggtgttgca aaaacgggag tgaccataga tccgttttcc
+     2461 aagcggaccc ataatatcgg ctggtaaaca tcactcgcta gtgcattctt tttgttggta
+     2521 atgataatca tttacattca ttctttgatg ttttatcata attaatgttt tgtcaataaa
+     2581 tatatggaaa catattgttt cagatgggaa tatgagaaag ttcatcctta tttctatgat
+     2641 aacgttagct agtgttagtc tgggagcctg cagacagaat gtcaccataa agcaggatgc
+     2701 gccagggcag aaagctttcc tgactgacgg gcagatttac gatttgcaca gtggcaaaat
+     2761 tatttctagc agcgagcttt tggcggatct tgctaccgct caacatctta ttattggtga
+     2821 aaaacacgat aatgccgagc atcatcagat tgagctttgg cttattcaaa atttgctcat
+     2881 ccagcgacca caggggagtg tgttgcttga gatgttgacg tcagagcaac agccccgagt
+     2941 taaccaagtt aaatgttggc tgaaagataa tcctgtggtt cgagatagcc gtgttcagga
+//

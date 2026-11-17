@@ -1,0 +1,133 @@
+ArgR frequency matrices 
+   -  Forward matrix provided by Dr Emanuele Conte. Reveres matrix generated from sequences provided by Dr Emanuele Conte (see bottom of this file)
+
+XerCD frequency matrices 
+   -  provided by Dr Emanuele Conte
+
+Original plasmid Database is
+   -   from the following ink
+
+https://figshare.com/articles/dataset/Complete_plasmids_ARG_carriage_study/19438994?file=34537640
+
+
+
+
+
+-------------------------------------------------------
+SHA256 Checksums to verify file identity and integrity
+-------------------------------------------------------
+  (If SHA256 values match, the file content hasn't changed)
+
+
+bacterial_plasmids_curated.fa.gz
+SHA256: 86eb0a2094cb6d7fa6a0fc002c11c7e42d78d6f9f847e35c17230506814e161a 
+
+argr-freq-matrix-for.txt
+SHA256: 44036e70838f2064f63f97924919330e0ecb41f4d907d5841c5cd3cb6b8ea0b6
+
+argr-freq-matrix-rev.txt
+SHA256: 88f458fa0e93726631e074e86100b18628450adc31900011641d59257f993725
+
+Prophecy_matrix_6bp_FOR.txt
+SHA256: 005d066417961a241e4a987f9bc7290199e3d3e31e1acd4bbe0850034383e955
+
+Prophecy_matrix_6bp_REV.txt
+SHA256: 9d1adfff83512362828231f5552f1ce38467511b96a7f440a3ca0682a1da9f1c
+
+Prophecy_matrix_7bp_FOR.txt
+SHA256: c4c85297e23a1eef7da12073003967e125d1773b340f298ad985365417d2e13b
+
+Prophecy_matrix_7bp_REV.txt
+SHA256: ff7dc026a83d5c42138f463b0037ec94947a3c0b94ef2eada801e4ee140fb250
+
+Prophecy_matrix_8bp_FOR.txt
+SHA256: 22f487530d0dfeba9607db2502c7b2f03bf1591aa0645701c8cd1f6490d4a263
+
+Prophecy_matrix_8bp_REV.txt
+SHA256: 7635d36b1c0efb0ab3098ba1428b8ae7fce4255cd7932d05f5ece53bc706dba8
+
+
+
+-------------------------------------------------------
+ArgR Reveres sequences provided by Emanuele
+-------------------------------------------------------
+
+
+>argA-1 32->50
+agtgtatttttattctgt
+
+>argA-2 11->29 
+tttgcatgattattcgaa
+
+>argD-1 51->69
+tatgcataaaaaatcact
+
+>argD-2 30->48
+tgtgaaattataaccaca
+
+>argECBH-1 26->44, argC 110->128
+actgcatgaatattgata
+
+>argECBH-2 47->65, argC 89->107
+agtgtatttttattcata
+
+>argF-1 48->66
+tatgtgtaattattcatt
+
+>argF-2 27->45
+attgaattaaaattcact
+
+>argG-1 73->91
+aatgagttttcatttaat
+
+>argG-2 52->70
+actgaatttttatgcaaa
+
+>argG-3 192->210
+actggatattcattcaca
+
+>argI-1 46->64
+tatggatgattattcatt
+
+>argI-2 25->43
+aatgaattaaaattcaat
+
+>argR-1 45->63
+gatgaatttttatgcaaa
+
+>argR-2 24->42
+acaacattattgtgcata
+
+>carAB-1 32->50
+tttgcatattaattcaca
+
+>carAB-2 11->29
+agagaatattcactcact
+
+
+-------------------
+Script used to make the ArgR rev file
+------------------
+import subprocess
+
+ArgR_rev_sequences_file = # add file path for the plain text file with the ArgR reverse sequences
+ArgR_prophecy_output = #add output file path for "argr-freq-matrix-rev.txt"
+
+Emboss_verify_result = subprocess.run(
+    ["prophecy", "-help"],
+    capture_output=True, text=True)
+if Emboss_verify_result.returncode != 0:
+    raise ValueError(" - EMBOSS PROPHECY could not be executed. Double check the installation.")
+print("\n - EMBOSS PROPHECY is installed and can be executed")
+
+
+prophecy_cmd = ["prophecy", 
+                "-sequence", str(ArgR_rev_sequences_file),  
+                "-outfile", str(ArgR_prophecy_output), 
+                "-threshold", "60",
+                "-auto"]
+
+prophecy_result = subprocess.run(prophecy_cmd, capture_output = True, text = True)
+
+if prophecy_result.returncode !=0:
+    print(f"Error executing prophecy. stderr: {prophecy_result.stderr}")

@@ -1,0 +1,44 @@
+>pbr1_pPAB19-4_Salmonella 28
+ggtgcgggcaagggatgttatgtttaat
+>ColA 28
+ggtgccgacaacggatgttatggtaaat
+>pHW15_Rahnella 28
+ggtgcgcggaacgggtgttatggtaaaa
+>pWQ799_Salmonella 28
+ggtgcgcccaaggaatgttatgtttaat
+>pbr2_pPAB19-2_Salmonella 28
+ggtgcacgcaagggatgttatgtttaat
+>ColE3-CA38 28
+ggtgcgtacaacgggagttatggtaaat
+>pEI2_Edwardsiella_ictaluri 28
+ggtgcgccgagcgggcgttatggtaaat
+>pIMVS1_S.typhimurium 28
+ggtgcacgcaacggatgttatggtaaat
+>pH205_Klebsiella 28
+ggtgccgataagggatgttatggtaaat
+>mwr_Klebsiella 28
+GGTGCACGCAACAGATGTTATGGTAAAT
+>psi_Salmonella  28
+GGTGCGCGCAAGATCCATTATGTTAAAC
+>Pectobacterium_pECA1039 28
+ggtgcggtgaacaggtgttatggtaaat
+>Rahnella_pHW4594 28
+ggtgcggtgaaccggtgttatggtaaat
+>Rahnella_pHW120 28
+ggtgcggtgaacggacgttatggtaaat
+>Rahnella_pHW114B 28
+ggtgcggtgaacggacgttatggtaaat
+>Rahnella_pHW114A 28
+ggtgcggtgaacaggtgttatggtaaat
+>Rahnella_pHW42 28
+ggtgcggtgaacaggtgttatggtaaat
+>Proteus_p3M-2B 28
+ggtacgcgcaagacccattatgttaaac
+>Pantoea_pPSP-ee2 28
+ggtgcgcgcaagatcgcttatgttaaat
+>Escherichia_pE80 28
+ggtgcgcgtaagatcccttatgttaaat
+>Salmonella_pST1120 28
+ggtgcgcgcaagagcgtttatgttaaat
+>Erwinia_pET09 28
+ggtgcgcgcaagaactcttatgttaaat
