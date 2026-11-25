@@ -1,21 +1,23 @@
 #1 import modules
 from pathlib import Path
-print("\n\n  Running Script create_plasmid_spreadsheet.py ... \n\n")
+print("\n\n  Running Script 401 ... \n\n")
 import csv
 from Bio import SeqIO
 from Bio.SeqUtils import gc_fraction
 
 #2 define file paths
-p2_folder = Path(__file__).resolve().parent
-plasmid_analyzer_folder = p2_folder.parent 
-p2_output_folder = p2_folder / "output_folder"
+p4_folder = Path(__file__).resolve().parent
+p4_outfolder = p4_folder / "output_folder"
+p4_outfolder.mkdir(parents=True, exist_ok=True)
+plasmid_analyzer_folder = p4_folder.parent 
 p1_folder = plasmid_analyzer_folder / "Part 1. emboss Scan"
 p1_input_folder = p1_folder / "input_folder"
-p1_output_folder = p1_folder / "output_folder"                   
+p1_output_folder = p1_folder / "output_folder"
+indiv_gbk_folder = p1_output_folder / "individual_GBKs"
 
     #2.1 define unsliced gbk file paths
 
-gbk_folder = p2_output_folder / "individual GBKs (full sequence)"
+gbk_folder = indiv_gbk_folder / "full sequence"
 if not gbk_folder.is_dir():
     raise FileNotFoundError(f"folder not found: full sequences")
 gbk_files = sorted(gbk_folder.glob("*.gbk"))
@@ -27,9 +29,9 @@ for file in gbk_files[:3]:
 
 
     #2.2 define sliced gbk file paths
-sliced_gbk_folder = p2_output_folder / "individual GBKs (3kb)"
+sliced_gbk_folder = indiv_gbk_folder / "3kb"
 if not sliced_gbk_folder.is_dir():
-    raise FileNotFoundError(f"folder not found: central_3kb_sequences")
+    raise FileNotFoundError(f"folder not found: 3kb GBKs")
 sliced_gbk_files = sorted(sliced_gbk_folder.glob("*.gbk"))
 if not sliced_gbk_files:
     raise FileNotFoundError("files not found: 3kb sliced gbk files")
@@ -38,25 +40,87 @@ for file in sliced_gbk_files[:3]:
     print("   ",file.name)
 
     #2.3 define emboss results file paths
-emboss_results_folder = p1_output_folder/ "xerCD hits after ArgR"
+emboss_results_folder = p1_output_folder/ "final_xerCD_hits"
 if not emboss_results_folder.is_dir():
-    raise FileNotFoundError("folder not found: xerCD hits after ArgR")
+    raise FileNotFoundError("folder not found: final_xerCD_hits")
 emboss_results_files = sorted(emboss_results_folder.glob("*.txt"))
 if not emboss_results_files:
-    raise FileNotFoundError("files not found: emboss results files, i.e. 'NEW XerCD 28 FOR.'")
+    raise FileNotFoundError("xerCD_Hits.txt files not found'")
 print("    ...", f"\n\n  ~~Found {len(emboss_results_files)} emboss results files~~")
 for file in emboss_results_files:
     print("   ",file.name)
 
     #2.4 define pyxer script results file paths
-pyxerscript_results_file = p2_output_folder / "compiled sequences (218+ bp)" / "central_218bp_sequences.txt"
+pyxerscript_results_file = p1_output_folder / "compiled_sequences_near_xerCD" / "218+ bp" / "central_218bp_sequences.txt"
 if not pyxerscript_results_file:
     raise FileNotFoundError("files not found: 218bp sequence files, i.e. 'output_NEW XerCD 28 FOR.'")
 
 
     #2.5 define outputs
-output_csv = p2_output_folder / "summary_spreadsheet.csv"
+output_csv = p4_outfolder / "summary_spreadsheet.csv"
 
+    #2.6 define cluster files
+p2_folder = plasmid_analyzer_folder / "Part 2. Phylogenetics"
+p2_outfolder = p2_folder / "output_folder"
+p2_annotations_folder = p2_outfolder / "annotations"
+p2_1kb_annot_folder = p2_annotations_folder / "for_1kb_trees"
+XerC_cluster_file = (
+    p2_1kb_annot_folder /
+    "XerC_and_up_1000bp_sequences_tree_clusters_summary.tsv")
+
+XerD_cluster_file = (
+    p2_1kb_annot_folder /
+    "XerD_and_down_1000bp_sequences_tree_clusters_summary.tsv")
+
+
+
+#build cluster lookup disctionaries
+#3 build cluster lookup dictionaries
+
+xerC_lookup = {}
+with open(XerC_cluster_file) as file:
+    next(file)
+    for line in file:
+        cluster_id, node_name = line.strip().split("\t")
+        xerC_lookup[node_name] = cluster_id
+
+
+xerD_lookup = {}
+with open(XerD_cluster_file) as file:
+    next(file)
+    for line in file:
+        cluster_id, node_name = line.strip().split("\t")
+        xerD_lookup[node_name] = cluster_id
+
+#3.2 define known functional sites
+the_cer_site_accession = "NC_001371.1"
+
+known_functional_sites_list = {
+    "NC_001371.1",
+    "NC_006881.1",
+    "NC_003486.1",
+    "NC_002119.1",
+    "NC_008053.1",
+    "NC_001373.1",
+    "NC_002090.1",
+    "NC_017330.1",
+    "X53663.1",}
+
+matches_known_functional_218bp_list = set()
+collapsed_218bp_file = (p1_output_folder / "compiled_sequences_near_xerCD" / "218+ bp" / "central_218bp_sequences_collapsed.txt")
+with open(collapsed_218bp_file) as file:
+    for line in file:
+        if not line.startswith(">"):
+            continue
+        members = line.strip()[1:].split("|")
+        accessions = []
+        for member in members:
+            accession = "_".join(member.split("_")[:-1])
+            accessions.append(accession)
+        if any(accession in known_functional_sites_list for accession in accessions):
+            matches_known_functional_218bp_list.update(accessions)
+
+pyxerscript_results_file = p1_output_folder / "compiled_sequences_near_xerCD" / "218+ bp" / "central_218bp_sequences.txt"
 
 #4 write the csv
 with open(output_csv, "w", newline="") as csvfile:
@@ -80,6 +144,10 @@ with open(output_csv, "w", newline="") as csvfile:
             "Host Organism",
             "Host Taxonomy",
             "GC Content (%)",
+            "Known Functional Sites",
+            "XerC Cluster",
+            "XerD Cluster",
+            "MOB Type",
         ])
     print(f"    ...\n\n  ~~Created CSV:~~\n     {output_csv} \n")
     print("  ~~headers added~~ \n")
@@ -124,6 +192,14 @@ with open(output_csv, "w", newline="") as csvfile:
                 )[0]
 
         gc_percent = gc_fraction(gbk_record.seq) * 100
+        if plasmid_accession == the_cer_site_accession:
+            known_functional_site = "The Cer Site"
+        elif plasmid_accession in known_functional_sites_list:
+            known_functional_site = "Other Known Functional Site"
+        elif plasmid_accession in matches_known_functional_218bp_list:
+            known_functional_site = "218bp sequences matches a known functional site"
+        else:
+            known_functional_site = "No"
 
 
              #4.5 get data from the sliced GBK file
@@ -193,7 +269,7 @@ with open(output_csv, "w", newline="") as csvfile:
         matching_emboss_file = None
         for file in emboss_results_files:
             if file.name.endswith(
-                f"{motif_length} {strand_orientation}.txt"
+                f"{motif_length}_{strand_orientation}.txt"
             ):
                 matching_emboss_file = file
                 break
@@ -215,7 +291,7 @@ with open(output_csv, "w", newline="") as csvfile:
 
 
         #4.9  identify the xerc, crossover region, and xerd sequence
-        isolate_xerc_xerd_upstream_downstream = p2_output_folder / "compiled sequences (xerC, crossover region, xerD)"
+        isolate_xerc_xerd_upstream_downstream = p1_output_folder / "compiled_sequences_near_xerCD" / "xerC, crossover region, xerD"
 
         xerc_sequence_list_file = isolate_xerc_xerd_upstream_downstream / "all_xerC_sites.txt" #xer c block
         if not xerc_sequence_list_file:
@@ -257,7 +333,21 @@ with open(output_csv, "w", newline="") as csvfile:
         if not crossover_sequence_line_found:
             raise ValueError(f"crossover sequence not found for {plasmid_accession}_{motif_coordinates}")
 
-        
+        #4.10 determine XerC and XerD cluster
+        xerC_cluster = "N/A"
+        for node_name, cluster_id in xerC_lookup.items():
+            if plasmid_accession in node_name:
+                xerC_cluster = cluster_id
+                break
+        xerD_cluster = "N/A"
+        for node_name, cluster_id in xerD_lookup.items():
+            if plasmid_accession in node_name:
+                xerD_cluster = cluster_id
+                break
+
+        #4.11 determine MOB value
+        mob_value = "not calculated"
+
         #5 write one row, while still in the loop
         write.writerow([
             plasmid_name,
@@ -276,10 +366,14 @@ with open(output_csv, "w", newline="") as csvfile:
             downstream_gene,
             host_organism,
             host_taxonomy,
-            gc_percent])
+            gc_percent,
+            known_functional_site,
+            xerC_cluster,
+            xerD_cluster,
+            mob_value])
         print("  ~~corresponding row added~~ \n\n")
 
-print("\n\n          Finished!!!!!\n\n")
+print("\n\n          Finished running script 401!!!!!\n\n")
 
 
 

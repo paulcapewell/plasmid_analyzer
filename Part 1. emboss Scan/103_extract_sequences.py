@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-print("\nRunning Script 201_extract_sequences.py ... \n\n")
+print("\nRunning Script 103_extract_sequences.py ... \n\n")
 #----------------------------------------
 # 1. import modules and set up email
 #----------------------------------------
@@ -11,6 +11,7 @@ import pickle
 from Bio import Entrez, SeqIO
 from Bio.SeqFeature import FeatureLocation, SeqFeature, CompoundLocation
 from Bio.SeqRecord import SeqRecord
+from collections import defaultdict
 
 ENTREZ_EMAIL = "2738493c@student.gla.ac.uk"
 Entrez.email = ENTREZ_EMAIL
@@ -20,25 +21,27 @@ print(f"\n ***Email selected: {ENTREZ_EMAIL}***\n")
 # 2. define file paths and infiles
 #----------------------------------------
 
-P2_folder = Path(__file__).resolve().parent                                 #P2 folder
-plasmid_analyzer_folder = P2_folder.parent                                  #plasmid analyzer folder
-OUTPUT_DIR = P2_folder / "output_folder"                                    #P2 output folder
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-P1_folder = plasmid_analyzer_folder / "Part 1. EMBOSS Scan"                      #P1 folder
+P1_folder = Path(__file__).resolve().parent                                 #P2 folder
+plasmid_analyzer_folder = P1_folder.parent                                  #plasmid analyzer folder
 P1_output_folder = P1_folder / "output_folder"                              #P1 output folder
 
-emboss_hits_XerCD_folder = P1_output_folder / "xerCD hits after ArgR"       #input files
+comp_seq_folder = P1_output_folder / "compiled_sequences_near_xerCD"
+comp_seq_folder.mkdir(parents=True, exist_ok=True)
+
+indiv_GBK_folder = P1_output_folder / "individual_GBKs"
+indiv_GBK_folder.mkdir(parents=True, exist_ok=True)
+
+emboss_hits_XerCD_folder = P1_output_folder / "final_xerCD_hits"       #input files
 if not emboss_hits_XerCD_folder.is_dir():
     raise FileNotFoundError(f"Input folder not found:\n{emboss_hits_XerCD_folder}")
-cached_database_folder = P1_output_folder / "cached_plasmid_database"       #cached plasmid database
+cached_database_folder = P1_output_folder / "database_cache"       #cached plasmid database
 DATABASE_CACHE = cached_database_folder / 'sequence_database_cache.bin.gz'
 if not DATABASE_CACHE.is_file():
     raise RuntimeError(f"sequence_database_cache.bin.gz was not found as a file:\n{DATABASE_CACHE}")
 
-export_folder_1 = OUTPUT_DIR / "compiled sequences (xerC, crossover region, xerD)"
+export_folder_1 = comp_seq_folder / "xerC, crossover region, xerD"
 export_folder_1.mkdir(parents=True, exist_ok=True)
-export_folder_2 = OUTPUT_DIR / "compiled sequences (218+ bp)"
+export_folder_2 = comp_seq_folder / "218+ bp"
 export_folder_2.mkdir(parents=True, exist_ok=True)
 
 #----------------------------------------
@@ -85,6 +88,7 @@ all_crossover_sequences = []
 all_xerd_sequences = []
 all_central_3kb_sequences = []
 all_218bp_sequences = []
+collapsed_218bp_sequences = defaultdict(list) # create a version of all_218bp_sequences that combines exact sequence matches
 
 
 desired_sequence_lengths = [250, 1000, 3000]
@@ -102,7 +106,7 @@ for filename in sorted(os.listdir(emboss_hits_XerCD_folder)):
         continue
     sequences_218bp = []
     try:
-        motif_length = int(filename.split()[-2])
+        motif_length = int(filename.removesuffix('.txt').split('_')[-2])
     except (IndexError, ValueError):
         print(f" - Skipping input file with an unrecognized name: {filename}")
         continue
@@ -199,6 +203,9 @@ for filename in sorted(os.listdir(emboss_hits_XerCD_folder)):
             # Preserve per-hit metadata; an accession can have hits in multiple files.
             all_hits.append((sequence_name, sequence_position, motif_length, is_reverse, hit_id))
 
+            #collect the collapsed 218bp sequences
+            collapsed_218bp_sequences[sequence_218bp].append(
+                f"{sequence_name}_{sequence_position}")
 
             #----------------------------------------
             # 10. extract xerD, CR, xerC binding sequences
@@ -221,6 +228,13 @@ for filename in sorted(os.listdir(emboss_hits_XerCD_folder)):
 with open(os.path.join(export_folder_2, 'central_218bp_sequences.txt'), 'w') as f:
     for name, seq in all_218bp_sequences:
         f.write(f">{name}\n{seq}\n")
+
+
+with open(os.path.join(export_folder_2, 'central_218bp_sequences_collapsed.txt'), 'w') as f:
+    for seq, names in collapsed_218bp_sequences.items():
+        combined_name = "|".join(names)
+        f.write(f">{combined_name}\n{seq}\n")
+
 
 with open(os.path.join(export_folder_1, 'all_xerC_sites.txt'), 'w') as f:
     for name, seq in all_xerc_sequences:
@@ -246,12 +260,15 @@ for size in desired_sequence_lengths:
 #----------------------------------------
 # 10. save full sequences
 #----------------------------------------
-os.makedirs(os.path.join(OUTPUT_DIR, 'individual GBKs (full sequence)'), exist_ok=True)
+os.makedirs(os.path.join(indiv_GBK_folder, 'full sequence'), exist_ok=True)
 # Fetch each accession once; the resulting record is reused for all of its hits.
-print(" - Saving full sequence of hit GBKs ... (may take 20+ minutes)\n\n")
+print(" - Saving full sequence of hit GBKs ... (may take 20+ minutes)")
+
 sequence_names = dict.fromkeys(hit[0] for hit in all_hits)
-for sequence_name in sequence_names:
-    gbk_path = os.path.join(OUTPUT_DIR, 'individual GBKs (full sequence)', f'{sequence_name}.gbk')
+total = len(sequence_names)
+for i, sequence_name in enumerate(sequence_names, start=1):
+    print(f"\r       Progress: {i:,}/{total:,}", end="", flush = True)
+    gbk_path = os.path.join(indiv_GBK_folder, 'full sequence', f'{sequence_name}.gbk')
     if not os.path.exists(gbk_path):
         try:
             handle = Entrez.efetch(db="nucleotide", id=sequence_name, rettype="gbwithparts", retmode="text")
@@ -267,10 +284,10 @@ for sequence_name in sequence_names:
 #----------------------------------------
 # 10. set up logic to get 3kb central sequences
 #----------------------------------------
-os.makedirs(os.path.join(OUTPUT_DIR, 'individual GBKs (3kb)'), exist_ok=True)
-print(" - Slicing Sequences ... (may take a few minutes)\\nn")
+os.makedirs(os.path.join(indiv_GBK_folder, '3kb'), exist_ok=True)
+print("\n\n - Slicing Sequences ... (may take a few minutes)\n\n")
 for sequence_name, position, motif_length, is_reverse, hit_id in all_hits:
-    gbk_path = os.path.join(OUTPUT_DIR, 'individual GBKs (full sequence)', f'{sequence_name}.gbk')
+    gbk_path = os.path.join(indiv_GBK_folder, 'full sequence', f'{sequence_name}.gbk')
     if not os.path.exists(gbk_path):
         print(f" - File not found for {sequence_name}")
         continue
@@ -389,11 +406,11 @@ for sequence_name, position, motif_length, is_reverse, hit_id in all_hits:
     adjusted_features.sort(key=lambda feature: feature.location.start)
     final_record.features = adjusted_features
 
-    with open(os.path.join(OUTPUT_DIR, 'individual GBKs (3kb)', f'{hit_id}.gbk'), "w") as output_handle:
+    with open(os.path.join(indiv_GBK_folder, '3kb', f'{hit_id}.gbk'), "w") as output_handle:
         SeqIO.write(final_record, output_handle, "genbank")
 
 with open(os.path.join(export_folder_2, 'all_central_3kb_sequences_sorted.txt'), 'w') as f:
     for name, seq in all_central_3kb_sequences:
         f.write(f">{name}\n{seq}\n")
 
-print("    ~~  Finished!! you have run the script 201_extract_sequences.py  ~~")
+print("\n\n    ~~  Finished!! you have run the script 103_extract_sequences.py  ~~\n\n")

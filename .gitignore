@@ -11,3 +11,6 @@
 **/*.fa.gz
 *.pdf
 
+
+#log of inputs files used
+infiles_used_report.txt

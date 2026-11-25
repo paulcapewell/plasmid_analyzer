@@ -1,4 +1,4 @@
-print("\n\n\n\t**Running Script: 403_export_tidy_images.py**\n\n")
+print("\n\n\n\t**Running Script 302**\n\n")
 
 
 # NOTE: this script requires Playwright + Chromium (pip install playwright ; playwright install chromium).
@@ -18,8 +18,8 @@ from playwright.sync_api import sync_playwright
 #define pre-existing folders
 p4_folder = Path(__file__).resolve().parent
 p4_outfolder = p4_folder / "output_folder"
-XerC_clinker_folder = p4_outfolder / "3kb clinkers from XerC 1kb clusters"
-XerD_clinker_folder = p4_outfolder / "3kb clinkers from XerD 1kb clusters"
+XerC_clinker_folder = p4_outfolder / "HTMLs from XerC 1kb clusters"
+XerD_clinker_folder = p4_outfolder / "HTMLs from XerD 1kb clusters"
 
 #confirm these folders exist
 folders_to_check = [p4_outfolder, XerC_clinker_folder, XerD_clinker_folder]
@@ -231,6 +231,12 @@ try:
             except Exception as err:
                 print(f"\t!! could not make {label} summary PDF: {err}")
                 failed.append(f"{label} summary PDF")
+
+
+
+
+
+        
         browser.close()
 
 #---------------------------------------------------------------------------
@@ -250,4 +256,4 @@ if failed:
 else:
     print("\n\tno file failures: no errors were encountered")
 
-print("\n\n\t***Finished running script 403!!***\n\n")
+print("\n\n\t***Finished running script 302!!***\n\n")

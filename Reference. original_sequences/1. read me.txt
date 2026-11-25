@@ -1,0 +1,3 @@
+the files in this folder were provided by Dr Emanuele Conte, in addition to the actual input frequency matrices used in the script in part 1. 
+
+These are the sequences he used to generate those frequency matrix files (I believe via emboss prophecy), but these are not strictly necessary to this software.

@@ -30,6 +30,7 @@ DATABASE_NAME = 'bacterial_plasmids_curated.fa.gz'
 #step 2. define file paths
 
 P1_emboss_folder = Path(__file__).resolve().parent                              #the folder for all of P1_emboss_folder
+PA_folder = P1_emboss_folder.resolve().parent
 input_folder = P1_emboss_folder / "input_folder"                        #input folder
 output_folder = P1_emboss_folder / "output_folder"                      #output folder
 output_folder.mkdir(parents=True, exist_ok=True)
@@ -37,7 +38,7 @@ output_folder.mkdir(parents=True, exist_ok=True)
 plasmid_database_folder = input_folder / "original_plasmid_database"        #plasmid database folder
 ORIGINAL_DATABASE = plasmid_database_folder / DATABASE_NAME                       #plasmid database file
 
-cached_database_folder = output_folder / "cached_plasmid_database"          #cached plasmid database folder
+cached_database_folder = output_folder / "database_cache"          #cached plasmid database folder
 cached_database_folder.mkdir(parents=True, exist_ok=True)
 DATABASE_CACHE = cached_database_folder / 'sequence_database_cache.bin.gz'   #cached plasmid database file
 file_id_folder = output_folder / "file_identity_and_integrity"
@@ -126,42 +127,33 @@ cached_database_checksum = cached_sha256.hexdigest()
 
 #make a receipt.txt file
 
-
-receipt_file = file_id_folder / "receipt.txt"
+receipt_file = PA_folder / "infiles_used_report.txt"
 receipt_text = f"""
-Database Cache Creation Report
+------------------------------
+New Cached Database Created
 ------------------------------
 
-Creation Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 Original Database:
     file - {ORIGINAL_DATABASE.name}
-    path - {ORIGINAL_DATABASE}
-    Size in bytes = {ORIGINAL_DATABASE.stat().st_size:,}
     SHA256 = {database_checksum} 
        This SHA256 is unique to the original database's file contents
        it will change if any edit is made at all to the file content
 
-Reading the Original Database:
-    number of FASTA Records Encountered: {record_count:,}
-    unique dictionary entries: {len(sequence_database):,}
-    Total Bases Stored: {total_bases:,}
-    duplicate headers: {duplicate_headers:,}
-    First 20 duplicate headers, if detected:
-        {chr(10).join(duplicate_names[:20])}
-    
-    
-
 Cache File:
-        File Was Verified to successfully reload after being written
-        File's dictionary size was verified to match the origianl 
     File: {DATABASE_CACHE.name}
-    Size in bytes = {DATABASE_CACHE.stat().st_size:,}
     SHA256 = {cached_database_checksum}
         this SHA256 is unique to the cached database's file contents
         it will change if any edit is made at all to the file content
-"""
 
-receipt_file.write_text(receipt_text)
+Verification
+    Cache successfully reloaded: YES
+    Original dictionary size: {len(sequence_database):,}
+    Cached dictionary size: {len(verify_database):,}
+"""
+with open(receipt_file, "a") as outfile:
+    outfile.write(receipt_text)
+    outfile.write("\n\n")
 print(f" - Receipt saved to:\n      {receipt_file}")
 print("\n\n    ***  Script Finished!!  ***")
